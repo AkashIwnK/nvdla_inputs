@@ -1,5 +1,10 @@
 //#include <dirent.h>
 //#include <sys/types.h>
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+#include <sys/time.h>
+#include <unistd.h>
 #include <bits/stdc++.h> 
 #include <iostream>
 #include <string>
@@ -21,25 +26,22 @@ void ExecuteWithImage(std::string &ImageName) {
 }
 
 void GenerateFileNames(std::vector<std::string> &FileNamesList) {
-	std::string Prefix = "00";
-	for(int i = 0; i < MAX_NUM_FILE_NAMES; i++) {
-		FileNamesList.push_back(Prefix + std::to_string(i) + std::string("_0.jpg"));
-	}
-	Prefix = "10";
-	for(int i = 0; i < MAX_NUM_FILE_NAMES; i++)
-		FileNamesList.push_back(Prefix + std::to_string(i) + std::string("_1.jpg"));
+	auto AddFileName = [&](std::string Prefix, std::string Suffix) {
+		for(int i = 0; i < MAX_NUM_FILE_NAMES; i++) {
+			if(i < 10) {
+				FileNamesList.push_back(Prefix + std::string("0") 
+										+ std::to_string(i) + std::string(Suffix));
+			} else {
+				FileNamesList.push_back(Prefix + std::to_string(i) + std::string(Suffix));
+			}
+		}
+	};
 	
-	Prefix = "20";
-	for(int i = 0; i < MAX_NUM_FILE_NAMES; i++)
-		FileNamesList.push_back(Prefix + std::to_string(i) + std::string("_2.jpg"));
-	
-	Prefix = "30";
-	for(int i = 0; i < MAX_NUM_FILE_NAMES; i++)
-		FileNamesList.push_back(Prefix + std::to_string(i) + std::string("_3.jpg"));
-	
-	Prefix = "40";
-	for(int i = 0; i < MAX_NUM_FILE_NAMES; i++)
-		FileNamesList.push_back(Prefix + std::to_string(i) + std::string("_4.jpg"));
+	AddFileName(std::string("00"), std::string("_0.jpg"));
+	AddFileName(std::string("10"), std::string("_1.jpg"));
+	AddFileName(std::string("20"), std::string("_2.jpg"));
+	AddFileName(std::string("30"), std::string("_3.jpg"));
+	AddFileName(std::string("40"), std::string("_4.jpg"));
 }
 
 int main() {
@@ -103,14 +105,18 @@ int main() {
 		
 		// If the expected and output classes are the same, classification is correct
 		std::cout << "OUTPUT CLASS: " << OutputClass << "\n";
-		if(OutputClass == GroundClass)
-			Correct++;
+		if(OutputClass == GroundClass) {
+			 Correct++;
+			std::cout << "MATCH FOUND!!!\n";
+			std::cout << "Correct value: " << Correct << "\n";
+		}
 	}
 	
 	// Compute final accuracy
-	float Accuracy = 100 * (((float)Correct) * 1.0 / ((float)numImages));
+	float Accuracy = ((float)100) * (((float)Correct) * 1.0 / ((float)numImages));
+	std::cout << "Correct value: " << Correct << "\n";
+	std::cout << "numImages value: " << numImages << "\n";
 	std::cout << "FINAL ACCURACY: " << Accuracy << "\n";
 	
 	return 0;
 }
-
