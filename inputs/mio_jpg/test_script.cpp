@@ -23,6 +23,7 @@ void ExecuteWithImage(std::string &ImageName) {
 	std::cout << "Executing command: " << Cmd << "\n";
 	system(Cmd.c_str());
 	std::cout << "Execution completed\n";
+	sleep(10);
 }
 
 void GenerateFileNames(std::vector<std::string> &FileNamesList) {
@@ -96,7 +97,7 @@ int main() {
 			    size_t Size;
 			    float Prob = std::stof(Token, &Size);
 			    if(Prob > MaxProbablity) {
-			    	Prob = MaxProbablity;
+			    	MaxProbablity = Prob;
 			    	OutputClass = Class;
 			    }
 			    Class++;
